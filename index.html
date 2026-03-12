@@ -3,24 +3,261 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello World</title>
+  <title>Hello World ✦</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #1a1a2e;
+      --panel: #16213e;
+      --border: #e94560;
+      --accent: #f5a623;
+      --green: #4ecca3;
+      --purple: #a855f7;
+      --white: #eaeaea;
+      --star: #ffe066;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0;
+      background-color: var(--bg);
+      font-family: 'Press Start 2P', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 픽셀 별 배경 */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--star);
+      image-rendering: pixelated;
+      animation: twinkle 2s infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.2; transform: scale(0.5); }
+    }
+
+    /* 메인 카드 */
+    .card {
+      position: relative;
+      z-index: 1;
+      background: var(--panel);
+      padding: 48px 56px;
+      text-align: center;
+
+      /* 픽셀 테두리 */
+      border: 4px solid var(--border);
+      box-shadow:
+        0 0 0 4px var(--bg),
+        0 0 0 8px var(--border),
+        8px 8px 0 8px rgba(233,69,96,0.25);
+    }
+
+    /* 타이틀 바 */
+    .titlebar {
+      position: absolute;
+      top: -32px;
+      left: -4px;
+      right: -4px;
+      height: 28px;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      gap: 8px;
+    }
+    .dot {
+      width: 10px; height: 10px;
+      background: var(--accent);
+      outline: 2px solid #000;
+    }
+    .dot:nth-child(2) { background: var(--green); }
+    .dot:nth-child(3) { background: var(--purple); }
+    .titlebar-text {
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 8px;
+      color: #fff;
+      letter-spacing: 2px;
+    }
+
+    /* 스프라이트 캐릭터 (CSS 픽셀아트) */
+    .sprite {
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background-color: #f0f0f0;
-      font-family: sans-serif;
+      margin-bottom: 32px;
     }
-    h1 {
-      font-size: 3rem;
-      color: #333;
+    .pixel-char {
+      image-rendering: pixelated;
+      width: 64px;
+      height: 64px;
+      animation: bounce 1s steps(2) infinite;
+    }
+    @keyframes bounce {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-8px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Hello World 텍스트 */
+    .hello {
+      font-size: 28px;
+      color: var(--green);
+      letter-spacing: 2px;
+      text-shadow:
+        3px 3px 0 #0a5c47,
+        0 0 20px rgba(78,204,163,0.5);
+      animation: colorshift 4s steps(1) infinite;
+    }
+    @keyframes colorshift {
+      0%   { color: var(--green);  text-shadow: 3px 3px 0 #0a5c47, 0 0 20px rgba(78,204,163,0.5); }
+      33%  { color: var(--accent); text-shadow: 3px 3px 0 #7a5100, 0 0 20px rgba(245,166,35,0.5); }
+      66%  { color: var(--purple); text-shadow: 3px 3px 0 #4a1a7a, 0 0 20px rgba(168,85,247,0.5); }
+    }
+
+    /* 깜빡이 커서 */
+    .cursor {
+      display: inline-block;
+      width: 16px; height: 28px;
+      background: var(--white);
+      margin-left: 6px;
+      vertical-align: middle;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%,100% { opacity: 0; }
+    }
+
+    /* 서브텍스트 */
+    .sub {
+      margin-top: 28px;
+      font-size: 8px;
+      color: #666;
+      letter-spacing: 1px;
+      line-height: 2;
+    }
+    .sub span { color: var(--accent); }
+
+    /* 하단 픽셀 진행바 */
+    .progressbar {
+      margin-top: 36px;
+      width: 240px;
+      height: 16px;
+      background: #0d0d1a;
+      border: 3px solid #333;
+      overflow: hidden;
+      position: relative;
+    }
+    .progressbar::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      width: 0%;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--green) 0px, var(--green) 8px,
+        #0d5c42 8px, #0d5c42 16px
+      );
+      animation: load 3s steps(15) forwards;
+    }
+    @keyframes load {
+      to { width: 100%; }
+    }
+
+    /* 픽셀 점수판 느낌 */
+    .score {
+      margin-top: 20px;
+      font-size: 7px;
+      color: var(--star);
+      letter-spacing: 1px;
     }
   </style>
 </head>
 <body>
-  <h1>Hello World</h1>
+
+  <!-- 별 배경 -->
+  <div class="stars" id="stars"></div>
+
+  <!-- 메인 카드 -->
+  <div class="card">
+    <div class="titlebar">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="titlebar-text">HELLO_WORLD.EXE</div>
+    </div>
+
+    <!-- 픽셀 캐릭터 (SVG) -->
+    <div class="sprite">
+      <svg class="pixel-char" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <!-- 몸 -->
+        <rect x="4" y="5" width="8" height="7" fill="#f5a623"/>
+        <!-- 얼굴 -->
+        <rect x="5" y="6" width="6" height="4" fill="#ffe5b4"/>
+        <!-- 눈 -->
+        <rect x="6" y="7" width="1" height="1" fill="#1a1a2e"/>
+        <rect x="9" y="7" width="1" height="1" fill="#1a1a2e"/>
+        <!-- 입 -->
+        <rect x="7" y="9" width="2" height="1" fill="#e94560"/>
+        <!-- 귀/뿔 -->
+        <rect x="4" y="3" width="2" height="2" fill="#e94560"/>
+        <rect x="10" y="3" width="2" height="2" fill="#e94560"/>
+        <!-- 팔 -->
+        <rect x="2" y="6" width="2" height="3" fill="#f5a623"/>
+        <rect x="12" y="6" width="2" height="3" fill="#f5a623"/>
+        <!-- 다리 -->
+        <rect x="5" y="12" width="2" height="3" fill="#a855f7"/>
+        <rect x="9" y="12" width="2" height="3" fill="#a855f7"/>
+        <!-- 발 -->
+        <rect x="4" y="14" width="3" height="1" fill="#4ecca3"/>
+        <rect x="9" y="14" width="3" height="1" fill="#4ecca3"/>
+        <!-- 별 장식 -->
+        <rect x="1" y="1" width="1" height="1" fill="#ffe066"/>
+        <rect x="14" y="2" width="1" height="1" fill="#ffe066"/>
+        <rect x="0" y="8" width="1" height="1" fill="#ffe066"/>
+        <rect x="15" y="10" width="1" height="1" fill="#ffe066"/>
+      </svg>
+    </div>
+
+    <div class="hello">HELLO WORLD<span class="cursor"></span></div>
+
+    <div class="sub">
+      PLAYER 1 &nbsp;<span>▶ START</span><br>
+      PRESS ANY KEY TO CONTINUE
+    </div>
+
+    <div class="progressbar"></div>
+    <div class="score">★ SCORE : 001000 ★</div>
+  </div>
+
+  <script>
+    // 픽셀 별 생성
+    const container = document.getElementById('stars');
+    for (let i = 0; i < 60; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.top  = Math.random() * 100 + 'vh';
+      s.style.animationDelay = (Math.random() * 2).toFixed(2) + 's';
+      s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+      container.appendChild(s);
+    }
+  </script>
 </body>
 </html>
